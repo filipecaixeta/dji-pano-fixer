@@ -1,79 +1,18 @@
-<input type="file" id="files" />
-<div id="panoimage"></div>
-<script>
-    function handleFileSelect(evt) {
-        var file = evt.target.files[0]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input type="file" id="files" />
+    <div id="panoimage"></div>
 
-        var reader = new FileReader()
-        reader.onload = function(e) {
-            // Get the image
-            var image = e.target.result
-            header_end = image.search("base64,")+"base64,".length
-            image_header = image.substring(0, header_end)
-            image_old = atob(image.substring(header_end))
-            // Find the xml
-            xml_start = image_old.search("<x:xmpmeta")
-            xml_end = image_old.search("</x:xmpmeta>")+"</x:xmpmeta>".length
-            xml = image_old.substring(xml_start, xml_end)
-            // Parse the xml
-            parser = new DOMParser()
-            xml_doc = parser.parseFromString(xml,"text/xml")
-            xml_result = '<x:xmpmeta xmlns:x="adobe:ns:meta/">\n'
-            xml_result += ' <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">\n'
-            // Find the attributes
-            rdf = xml_doc.children[0].children[0].children[0]
-            _attributes = [ ...rdf.attributes ]
-            attributes = {}
-            for (let att of _attributes) {
-                attributes[att.name] = att.value
-            }
-            // Add 360 pano attributes
-            attributes["xmlns:GPano"] = "http://ns.google.com/photos/1.0/panorama/"
-            attributes["GPano:ProjectionType"] = "equirectangular"
-            // Create xml_result
-            attributes_names = Object.keys(attributes)
-            about = attributes["rdf:about"]
-            xmlns = attributes_names.filter(a=>a.startsWith("xmlns:"))
-            for (let x of xmlns) {
-                let val = x.substring("xmlns:".length)
-                xml_result += `  <rdf:Description rdf:about="${about}" ${x}="${attributes[x]}">\n`
-                for (let att of attributes_names.filter(a=>a.startsWith(val+":"))) {
-                    xml_result += `   <${att}>${attributes[att]}</${att}>\n`
-                }
-                xml_result += `  </rdf:Description>\n`                
-            }
-            xml_result += ' </rdf:RDF>\n'
-            xml_result += '</x:xmpmeta>'
-            
-            var image = new Image()
-            image.src = image_header + btoa(
-                image_old.substring(0, xml_start) + 
-                xml_result +
-                image_old.substring(xml_end)
-            )
-            image.width = 200
-            var el = document.getElementById("panoimage").append(image)
+    <script src="main.js"></script>
+    <script>
 
-            download("hello.jpg", image.src)
-        };
-        reader.readAsDataURL(file)
-    }
-
-    document.getElementById('files').addEventListener('change', handleFileSelect, false)
-
-    function download(filename, data) {
-        var element = document.createElement('a')
-        element.setAttribute('href', data)
-        element.setAttribute('download', filename)
-        element.style.display = 'none'
-        document.body.appendChild(element)
-        element.click()
-        document.body.removeChild(element)
-    }
-
-</script>
-
-
-
-
-
+    </script>
+</body>
+</html>
