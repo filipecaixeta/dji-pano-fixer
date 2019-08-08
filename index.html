@@ -1,18 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.2/build/pannellum.css"/>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.2/build/pannellum.js"></script>  
+  <style>
+    #panorama {
+        width: 600px;
+        height: 400px;
+    }
+  </style>
 </head>
 <body>
-    <input type="file" id="files" />
-    <div id="panoimage"></div>
+  <input type="file" id="files" />
+  <div id="panorama"></div>
 
-    <script src="main.js"></script>
-    <script>
+  <script src="main.js"></script>
+  <script>
+    document.getElementById('files').addEventListener('change', handleFileSelect, false)
+  </script>
 
-    </script>
 </body>
 </html>

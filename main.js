@@ -47,7 +47,9 @@ function handleFileSelect(evt) {
 
     var reader = new FileReader()
     reader.onload = function(e) {
+        console.log(e)
         // Get the image
+        var image_name = e.target.fileName
         var image = e.target.result
         attributes = {
             "xmlns:GPano": "http://ns.google.com/photos/1.0/panorama/",
@@ -57,14 +59,19 @@ function handleFileSelect(evt) {
         var new_image = new Image()
         new_image.src = image
         new_image.width = 200
-        var el = document.getElementById("panoimage").append(new_image)
+        // var el = document.getElementById("panoimage").append(new_image)
 
-        download("hello.jpg", new_image.src)
+        pannellum.viewer('panorama', {
+          "type": "equirectangular",
+          "panorama": new_image.src,
+          "autoLoad": true,
+          "autoRotate": -2
+        })
+
+        // download("hello.jpg", new_image.src)
     };
     reader.readAsDataURL(file)
 }
-
-document.getElementById('files').addEventListener('change', handleFileSelect, false)
 
 function download(filename, data) {
     var element = document.createElement('a')
