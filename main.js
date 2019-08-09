@@ -42,12 +42,20 @@ function insert_attributes(base64_image, new_attributes) {
     return new_image
 }
 
+function view_pano_photo() {
+    pannellum.viewer('panorama', {
+        "type": "equirectangular",
+        "panorama": new_image.src,
+        "autoLoad": true,
+        "autoRotate": -2
+    })
+}
+
 function handleFileSelect(evt) {
     var file = evt.target.files[0]
 
     var reader = new FileReader()
     reader.onload = function(e) {
-        console.log(e)
         // Get the image
         var image_name = e.target.fileName
         var image = e.target.result
@@ -59,19 +67,15 @@ function handleFileSelect(evt) {
         var new_image = new Image()
         new_image.src = image
         new_image.width = 200
-        // var el = document.getElementById("panoimage").append(new_image)
-
-        pannellum.viewer('panorama', {
-          "type": "equirectangular",
-          "panorama": new_image.src,
-          "autoLoad": true,
-          "autoRotate": -2
-        })
+        
+        view_pano_photo()
 
         // download("hello.jpg", new_image.src)
     };
     reader.readAsDataURL(file)
 }
+
+
 
 function download(filename, data) {
     var element = document.createElement('a')
